@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TodosTest {
     Todos todos = new Todos();
     SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
+    SimpleTask simpleTask2 = new SimpleTask(2, "Позвонить друзьям");
+
 
     String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
     Epic epic = new Epic(55, subtasks);
@@ -24,15 +26,16 @@ class TodosTest {
     public void setup() {
 
         todos.add(simpleTask);
+        todos.add(simpleTask2);
         todos.add(epic);
         todos.add(meeting);
     }
 
     @Test
-    public void shouldAddThreeTasksOfDifferentType() {
+    public void shouldAddFourTasksOfDifferentType() {
 
 
-        Task[] expected = {simpleTask, epic, meeting};
+        Task[] expected = {simpleTask, simpleTask2, epic, meeting};
         Task[] actual = todos.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -64,4 +67,20 @@ class TodosTest {
 
     }
 
+    @Test
+    public void shouldFindMultiple() {
+        String query = "Позвонить";
+        Task[] actual = todos.search(query);
+        Task[] expected = {simpleTask, simpleTask2};
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+    @Test
+    public void shouldFindNothing() {
+        String query = "Пойти гулять";
+        Task[] actual = todos.search(query);
+        Task[] expected = {};
+        Assertions.assertArrayEquals(expected, actual);
+    }
 }
